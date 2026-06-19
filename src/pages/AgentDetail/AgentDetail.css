@@ -1,0 +1,138 @@
+.agent-detail__hero {
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.agent-detail__hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.agent-detail__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.2));
+}
+
+.agent-detail__hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 140px 24px 60px;
+  color: #ffffff;
+}
+
+.agent-detail__back {
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.agent-detail__hero-content h1 {
+  font-size: var(--font-h1);
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.agent-detail__hero-content p {
+  font-size: 1.125rem;
+  color: var(--color-accent);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.agent-detail__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+.agent-detail__bio {
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.agent-detail__specialisms {
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.agent-detail__specialisms h3 {
+  font-size: 1.125rem;
+  margin-bottom: 16px;
+}
+
+.agent-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agent-detail__tag {
+  padding: 6px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-size: var(--font-small);
+  border-radius: 4px;
+}
+
+.agent-detail__stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 32px 0;
+  border-top: 1px solid var(--color-border);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.agent-detail__stat {
+  text-align: center;
+  font-size: var(--font-small);
+  color: var(--color-text-secondary);
+}
+
+.agent-detail__stat span {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.agent-detail__form {
+  padding: 32px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.agent-detail__form h3 {
+  margin-bottom: 20px;
+}
+
+.agent-detail__submit {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .agent-detail__layout {
+    grid-template-columns: 1fr 380px;
+    align-items: start;
+  }
+
+  .agent-detail__sidebar {
+    position: sticky;
+    top: 100px;
+  }
+}

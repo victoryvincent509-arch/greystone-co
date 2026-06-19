@@ -1,0 +1,80 @@
+export const agents = [
+  {
+    id: 1,
+    name: 'Victoria Pemberton',
+    slug: 'victoria-pemberton',
+    title: 'Senior Property Consultant',
+    neighbourhoods: ['Mayfair', 'Kensington', 'Belgravia', 'Knightsbridge'],
+    yearsExperience: 14,
+    propertiesSold: 186,
+    clientRating: 5.0,
+    bio: 'Victoria Pemberton joined Greystone & Co. as a founding team member in 2012, having previously led residential sales at a leading Mayfair agency. A British specialist with an encyclopaedic knowledge of prime central London, she covers Georgian townhouses in Belgravia, lateral apartments in Mayfair, and family homes in Kensington. Her instinctive ability to match clients with their perfect home — combined with an unwavering commitment to discretion — has made her one of the most trusted names in London property. She holds a degree in Real Estate Management from the University of Reading and is a member of the Royal Institution of Chartered Surveyors.',
+    photo: 'https://images.unsplash.com/photo-1627161683077-e34782c24d81?w=400&q=80',
+    email: 'victoria@greystoneandco.co.uk',
+    phone: '+44 20 7946 0821',
+  },
+  {
+    id: 2,
+    name: 'Sophie Harrington',
+    slug: 'sophie-harrington',
+    title: 'Lettings Director',
+    neighbourhoods: ['Canary Wharf', 'Greenwich', 'Richmond'],
+    yearsExperience: 11,
+    propertiesSold: 143,
+    clientRating: 4.9,
+    bio: 'Sophie Harrington leads Greystone & Co.\'s award-winning lettings division with precision and warmth. A British specialist with a background in property law and over a decade managing prime London lettings, Sophie is the go-to expert for landlords and tenants seeking a seamless, professional experience across Canary Wharf, Greenwich, and Richmond. Her meticulous approach to every tenancy ensures that both parties are fully supported from start to finish, whether navigating corporate relocations, diplomatic households, or long-term private lettings. She regularly contributes to industry panels on the evolving London lettings landscape.',
+    photo: 'https://images.unsplash.com/photo-1585240975858-7264fd020798?w=400&q=80',
+    email: 'sophie@greystoneandco.co.uk',
+    phone: '+44 20 7946 0847',
+  },
+  {
+    id: 3,
+    name: 'Zara Okafor',
+    slug: 'zara-okafor',
+    title: 'Associate Consultant',
+    neighbourhoods: ['Marylebone', 'Fitzrovia', 'Covent Garden', 'Bloomsbury'],
+    yearsExperience: 5,
+    propertiesSold: 67,
+    clientRating: 4.8,
+    bio: 'Zara Okafor brings fresh energy and analytical rigour to Greystone & Co.\'s residential team. A British-Nigerian consultant educated at LSE, she specialises in central London\'s most desirable postcodes, from Marylebone\'s period squares to the creative quarters of Fitzrovia and Covent Garden. Zara\'s data-driven approach, combined with her deep understanding of lifestyle trends, makes her particularly adept at identifying opportunities for first-time buyers and young professionals seeking to establish themselves in prime London. Her commitment to transparency and client education has earned her praise from buyers who appreciate clear guidance through complex transactions.',
+    photo: 'https://images.unsplash.com/photo-1724362180955-271d1200803c?w=400&q=80',
+    email: 'zara@greystoneandco.co.uk',
+    phone: '+44 20 7946 0852',
+  },
+  {
+    id: 4,
+    name: 'James Whitmore',
+    slug: 'james-whitmore',
+    title: 'Property Consultant',
+    neighbourhoods: ['Fulham', 'Wandsworth', 'Battersea', 'Clapham'],
+    yearsExperience: 7,
+    propertiesSold: 89,
+    clientRating: 4.9,
+    bio: 'James Whitmore is a property consultant with particular expertise in south-west London\'s family neighbourhoods. Having grown up in Fulham and built his career across Wandsworth, Battersea, and Clapham, James possesses intimate knowledge of the area\'s schools, transport links, and community character. He specialises in helping families find their forever homes, whether that\'s a Victorian terrace in Wandsworth, a modern apartment in Battersea Power Station, or a family house on Clapham Common. James is known for his patience, attention to detail, and ability to navigate the complexities of the London market with families\' specific needs in mind.',
+    photo: 'https://images.unsplash.com/photo-1627161684458-a62da52b51c3?w=400&q=80',
+    email: 'james@greystoneandco.co.uk',
+    phone: '+44 20 7946 0865',
+  },
+  {
+    id: 5,
+    name: 'David Adeyemi',
+    slug: 'david-adeyemi',
+    title: 'Investment Consultant',
+    neighbourhoods: ['Chelsea', 'Notting Hill', 'Islington', 'Shoreditch'],
+    yearsExperience: 8,
+    propertiesSold: 112,
+    clientRating: 4.9,
+    bio: 'David Adeyemi is a Nigerian-British investment consultant who brings a dynamic and modern approach to London\'s prime and super-prime markets. Originally from Lagos and educated at UCL, he combines an international perspective with deep local knowledge of West and East London — from colourful Victorian terraces in Notting Hill to warehouse conversions in Shoreditch and riverside apartments in Chelsea. David specialises in working with investors seeking portfolio growth and high-yield opportunities, leveraging his understanding of emerging micro-markets and development potential. His straight-talking advice and relentless dedication to his clients have made him a trusted advisor for both domestic and international investors.',
+    photo: 'https://images.unsplash.com/photo-1621973133111-63649acea55a?w=400&q=80',
+    email: 'david@greystoneandco.co.uk',
+    phone: '+44 20 7946 0834',
+  },
+];
+
+export function getAgentBySlug(slug) {
+  return agents.find((agent) => agent.slug === slug) ?? null;
+}
+
+export function getFeaturedAgents(limit = 3) {
+  return agents.slice(0, limit);
+}

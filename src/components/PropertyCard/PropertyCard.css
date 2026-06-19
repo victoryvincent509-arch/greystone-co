@@ -1,0 +1,75 @@
+.property-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.property-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.property-card__media {
+  position: relative;
+}
+
+.property-card__badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  padding: 6px 14px;
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.property-card__body {
+  padding: 24px;
+}
+
+.property-card__name {
+  font-size: var(--font-h3);
+  margin-bottom: 8px;
+}
+
+.property-card__price {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.property-card__location {
+  font-size: var(--font-small);
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.property-card__stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-small);
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+}
+
+.property-card__divider {
+  color: var(--color-border);
+}
+
+.property-card__link {
+  font-weight: 600;
+}
+
+.property-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

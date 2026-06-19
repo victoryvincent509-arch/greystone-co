@@ -1,0 +1,52 @@
+.stats-bar {
+  padding: 48px 0;
+}
+
+.stats-bar__inner {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+}
+
+.stats-bar__item {
+  text-align: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.stats-bar__value {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.stats-bar__label {
+  font-size: var(--font-small);
+  color: var(--color-text-secondary);
+}
+
+.stats-bar__divider {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .stats-bar__inner {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stats-bar__divider {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 48px;
+    background: var(--color-border);
+  }
+}

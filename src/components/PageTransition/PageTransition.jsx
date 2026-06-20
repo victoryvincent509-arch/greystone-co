@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { gsap, pageTransitionIn, pageTransitionOut, animatePageEnter } from '../../utils/animations';
+import { gsap, pageTransitionIn, pageTransitionOut, animatePageEnter, killAllScrollTriggers } from '../../utils/animations';
 
 export default function PageTransition({ children }) {
   const overlayRef = useRef(null);
@@ -19,9 +19,19 @@ export default function PageTransition({ children }) {
       return;
     }
 
+    // Kill all existing ScrollTriggers to prevent conflicts on route change
+    killAllScrollTriggers();
+
     const overlay = overlayRef.current;
     const content = contentRef.current;
     if (!overlay || !content) return;
+
+    // Fallback timeout to ensure content becomes visible even if GSAP fails
+    const fallbackTimeout = setTimeout(() => {
+      if (content) {
+        gsap.set(content, { opacity: 1, y: 0 });
+      }
+    }, 1000);
 
     const tl = gsap.timeline();
 
@@ -30,10 +40,15 @@ export default function PageTransition({ children }) {
         gsap.set(content, { opacity: 0, y: 30 });
       })
       .add(pageTransitionOut(overlay))
-      .add(animatePageEnter(content));
+      .add(animatePageEnter(content))
+      .eventCallback('onComplete', () => {
+        clearTimeout(fallbackTimeout);
+      });
 
     return () => {
       tl.kill();
+      clearTimeout(fallbackTimeout);
+      killAllScrollTriggers();
     };
   }, [location.pathname]);
 

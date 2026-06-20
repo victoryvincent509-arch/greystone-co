@@ -9,7 +9,14 @@ export function animateSectionReveal(scope, selector = '[data-animate]') {
   const elements = scope?.querySelectorAll(selector);
   if (!elements?.length) return;
 
-  gsap.to(elements, {
+  // Fallback timeout to ensure elements become visible even if GSAP fails
+  const fallbackTimeout = setTimeout(() => {
+    elements.forEach(el => {
+      gsap.set(el, { opacity: 1, y: 0 });
+    });
+  }, 1000);
+
+  const animation = gsap.to(elements, {
     opacity: 1,
     y: 0,
     duration: 0.8,
@@ -19,15 +26,32 @@ export function animateSectionReveal(scope, selector = '[data-animate]') {
       trigger: elements[0],
       start: 'top 85%',
       toggleActions: 'play none none none',
+      onRefresh: () => {
+        // Clear fallback if animation successfully triggers
+        clearTimeout(fallbackTimeout);
+      },
+    },
+    onComplete: () => {
+      // Clear fallback when animation completes
+      clearTimeout(fallbackTimeout);
     },
   });
+
+  return animation;
 }
 
 export function animateStaggerCards(scope, selector = '[data-card]') {
   const cards = scope?.querySelectorAll(selector);
   if (!cards?.length) return;
 
-  gsap.to(cards, {
+  // Fallback timeout to ensure cards become visible even if GSAP fails
+  const fallbackTimeout = setTimeout(() => {
+    cards.forEach(card => {
+      gsap.set(card, { opacity: 1, y: 0 });
+    });
+  }, 1000);
+
+  const animation = gsap.to(cards, {
     opacity: 1,
     y: 0,
     duration: 0.7,
@@ -37,8 +61,16 @@ export function animateStaggerCards(scope, selector = '[data-card]') {
       trigger: cards[0].parentElement,
       start: 'top 80%',
       toggleActions: 'play none none none',
+      onRefresh: () => {
+        clearTimeout(fallbackTimeout);
+      },
+    },
+    onComplete: () => {
+      clearTimeout(fallbackTimeout);
     },
   });
+
+  return animation;
 }
 
 export function animateCounter(element, endValue, options = {}) {
@@ -104,9 +136,27 @@ export function pageTransitionOut(overlay) {
 }
 
 export function animatePageEnter(scope) {
-  return gsap.fromTo(
+  // Fallback timeout to ensure content becomes visible even if GSAP fails
+  const fallbackTimeout = setTimeout(() => {
+    if (scope) {
+      gsap.set(scope, { opacity: 1, y: 0 });
+    }
+  }, 1000);
+
+  const animation = gsap.fromTo(
     scope,
     { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: 0.3 }
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power3.out',
+      delay: 0.3,
+      onComplete: () => {
+        clearTimeout(fallbackTimeout);
+      },
+    }
   );
+
+  return animation;
 }

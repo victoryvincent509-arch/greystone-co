@@ -28,10 +28,11 @@ function ScrollManager() {
 
   useEffect(() => {
     scrollToTop();
-    killAllScrollTriggers();
+    // Note: ScrollTrigger cleanup is handled by PageTransition component
+    // to avoid conflicts with page transition animations
     const timer = setTimeout(() => {
       refreshScrollTrigger();
-    }, 100);
+    }, 300);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 

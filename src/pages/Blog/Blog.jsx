@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import { animateSectionReveal, animateStaggerCards, ScrollTrigger } from '../../utils/animations';
 import { blogPosts } from '../../data/blogPosts';
@@ -10,7 +10,6 @@ export default function Blog() {
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
-    animateStaggerCards(pageRef.current?.querySelector('.blog-grid'));
 
     // Refresh ScrollTrigger after animations are set up to ensure
     // trigger points are calculated based on the complete DOM
@@ -18,6 +17,26 @@ export default function Blog() {
       ScrollTrigger.refresh();
     }, 100);
   }, { scope: pageRef });
+
+  // Separate effect for stagger cards to ensure grid items are in DOM
+  useEffect(() => {
+    const checkAndAnimate = () => {
+      const grid = pageRef.current?.querySelector('.blog-grid');
+      const cards = grid?.querySelectorAll('[data-card]');
+
+      if (cards && cards.length > 0) {
+        // Grid items are in DOM, animate them
+        animateStaggerCards(grid);
+        ScrollTrigger.refresh();
+      } else {
+        // Grid items not ready yet, retry after delay
+        setTimeout(checkAndAnimate, 50);
+      }
+    };
+
+    // Delay initial check to allow React to render mapped items
+    setTimeout(checkAndAnimate, 150);
+  }, []);
 
   return (
     <div ref={pageRef} className="blog-page">

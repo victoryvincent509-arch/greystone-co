@@ -37,31 +37,6 @@ export default function Home() {
       .fromTo('.hero__subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.0)
       .fromTo('.hero__actions', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.2)
       .fromTo('.hero__search', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.4);
-
-    gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.2 }, {
-      y: () => window.innerHeight * 0.4,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
-
-    // Increased parallax effect on mobile
-    if (window.innerWidth < 768) {
-      gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.15 }, {
-        y: () => window.innerHeight * 0.35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    }
   }, { scope: heroRef });
 
   useGSAP(() => {
@@ -78,16 +53,11 @@ export default function Home() {
     <div ref={pageRef} className="home">
       <section ref={heroRef} className="hero">
         <div className="hero__video-wrap">
-          <video
+          <img
             className="hero__video"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600&q=85"
-          >
-            <source src="/hero.mp4" type="video/mp4" />
-          </video>
+            src="https://images.unsplash.com/photo-1513026705753-bc3fffca8bf4?w=1600&q=85"
+            alt="London skyline"
+          />
           <div className="hero__overlay" />
         </div>
         <div className="hero__content container">

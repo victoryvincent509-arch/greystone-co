@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
 import { gsap, animateSectionReveal, animateStaggerCards, setupParallax, ScrollTrigger } from '../../utils/animations';
@@ -27,48 +27,59 @@ export default function Home() {
   const ctaMagnetic = useMagneticButton();
   const ctaMagnetic2 = useMagneticButton();
 
-  useGSAP(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
+  // Hero parallax with DOM-ready check
+  useEffect(() => {
+    const checkAndAnimateHero = () => {
+      const hero = heroRef.current;
+      const heroVideo = hero?.querySelector('.hero__video');
 
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.fromTo('.hero__eyebrow', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 0.6)
-      .fromTo('.hero__title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8 }, 0.8)
-      .fromTo('.hero__subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.0)
-      .fromTo('.hero__actions', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.2)
-      .fromTo('.hero__search', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.4);
+      if (hero && heroVideo) {
+        // Hero section is in DOM, animate it
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        tl.fromTo('.hero__eyebrow', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 0.6)
+          .fromTo('.hero__title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+          .fromTo('.hero__subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.0)
+          .fromTo('.hero__actions', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.2)
+          .fromTo('.hero__search', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.4);
 
-    gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.2 }, {
-      y: () => window.innerHeight * 0.4,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
+        gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.2 }, {
+          y: () => window.innerHeight * 0.4,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
 
-    // Increased parallax effect on mobile
-    if (window.innerWidth < 768) {
-      gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.15 }, {
-        y: () => window.innerHeight * 0.35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    }
-  }, { scope: heroRef });
+        // Increased parallax effect on mobile
+        if (window.innerWidth < 768) {
+          gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.15 }, {
+            y: () => window.innerHeight * 0.35,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: hero,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+            },
+          });
+        }
+
+        ScrollTrigger.refresh();
+      } else {
+        // Hero not ready yet, retry after delay
+        setTimeout(checkAndAnimateHero, 50);
+      }
+    };
+
+    // Delay initial check to allow React to render
+    setTimeout(checkAndAnimateHero, 150);
+  }, []);
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
-    animateStaggerCards(pageRef.current?.querySelector('.properties__grid'));
-    animateStaggerCards(pageRef.current?.querySelector('.agents-teaser__grid'));
-    animateStaggerCards(pageRef.current?.querySelector('.blog-teaser__grid'));
     setupParallax(aboutImageRef.current, 0.4);
     const parallaxImg = parallaxRef.current?.querySelector('.home-parallax__image');
     if (parallaxImg) setupParallax(parallaxImg, 0.4);
@@ -79,6 +90,35 @@ export default function Home() {
       ScrollTrigger.refresh();
     }, 100);
   }, { scope: pageRef });
+
+  // Separate effect for stagger cards to ensure grid items are in DOM
+  useEffect(() => {
+    const checkAndAnimateGrids = () => {
+      const propertiesGrid = pageRef.current?.querySelector('.properties__grid');
+      const agentsGrid = pageRef.current?.querySelector('.agents-teaser__grid');
+      const blogGrid = pageRef.current?.querySelector('.blog-teaser__grid');
+
+      const propertiesCards = propertiesGrid?.querySelectorAll('[data-card]');
+      const agentsCards = agentsGrid?.querySelectorAll('[data-card]');
+      const blogCards = blogGrid?.querySelectorAll('[data-card]');
+
+      if ((propertiesCards && propertiesCards.length > 0) ||
+        (agentsCards && agentsCards.length > 0) ||
+        (blogCards && blogCards.length > 0)) {
+        // At least one grid is ready, animate them
+        if (propertiesGrid) animateStaggerCards(propertiesGrid);
+        if (agentsGrid) animateStaggerCards(agentsGrid);
+        if (blogGrid) animateStaggerCards(blogGrid);
+        ScrollTrigger.refresh();
+      } else {
+        // Grid items not ready yet, retry after delay
+        setTimeout(checkAndAnimateGrids, 50);
+      }
+    };
+
+    // Delay initial check to allow React to render mapped items
+    setTimeout(checkAndAnimateGrids, 150);
+  }, []);
 
   return (
     <div ref={pageRef} className="home">

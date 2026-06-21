@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
-import { gsap, animateSectionReveal } from '../../utils/animations';
+import { gsap, animateSectionReveal, ScrollTrigger } from '../../utils/animations';
 import { filterProperties } from '../../data/properties';
 import PropertyCard from '../../components/PropertyCard/PropertyCard';
 import './Listings.css';
@@ -60,6 +60,12 @@ export default function Listings() {
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   useGSAP(() => {
@@ -73,6 +79,11 @@ export default function Listings() {
       stagger: 0.08,
       ease: 'power3.out',
     });
+
+    // Refresh ScrollTrigger after cards animation is set up
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { dependencies: [filtered], scope: gridRef });
 
   const clearFilters = () => {

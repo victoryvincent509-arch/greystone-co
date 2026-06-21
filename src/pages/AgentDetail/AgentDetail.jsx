@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
-import { animateSectionReveal, animateStaggerCards } from '../../utils/animations';
+import { animateSectionReveal, animateStaggerCards, ScrollTrigger } from '../../utils/animations';
 import { getAgentBySlug } from '../../data/agents';
 import { getPropertiesByAgent } from '../../data/properties';
 import PropertyCard from '../../components/PropertyCard/PropertyCard';
@@ -17,6 +17,12 @@ export default function AgentDetail() {
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
     animateStaggerCards(pageRef.current?.querySelector('.agent-listings__grid'));
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   if (!agent) {

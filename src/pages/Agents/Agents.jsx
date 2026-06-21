@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
-import { animateSectionReveal, animateStaggerCards } from '../../utils/animations';
+import { animateSectionReveal, animateStaggerCards, ScrollTrigger } from '../../utils/animations';
 import { agents } from '../../data/agents';
 import './Agents.css';
 
@@ -11,6 +11,12 @@ export default function Agents() {
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
     animateStaggerCards(pageRef.current?.querySelector('.agents-grid'));
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   return (

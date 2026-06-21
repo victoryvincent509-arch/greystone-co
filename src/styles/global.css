@@ -337,7 +337,7 @@ ul {
 [data-animate] {
   opacity: 0;
   transform: translateY(30px);
-  animation: fadeIn 0.8s ease-out 1s forwards;
+  animation: fadeIn 0.6s ease-out 0.5s forwards;
 }
 
 @keyframes fadeIn {

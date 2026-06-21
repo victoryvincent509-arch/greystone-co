@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
-import { gsap, animateSectionReveal, animateStaggerCards, setupParallax } from '../../utils/animations';
+import { gsap, animateSectionReveal, animateStaggerCards, setupParallax, ScrollTrigger } from '../../utils/animations';
 import { useMagneticButton } from '../../hooks/useMagneticButton';
 import { properties } from '../../data/properties';
 import { getFeaturedAgents } from '../../data/agents';
@@ -37,6 +37,31 @@ export default function Home() {
       .fromTo('.hero__subtitle', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.0)
       .fromTo('.hero__actions', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.2)
       .fromTo('.hero__search', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 1.4);
+
+    gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.2 }, {
+      y: () => window.innerHeight * 0.4,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+
+    // Increased parallax effect on mobile
+    if (window.innerWidth < 768) {
+      gsap.fromTo('.hero__video', { y: () => -window.innerHeight * 0.15 }, {
+        y: () => window.innerHeight * 0.35,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }
   }, { scope: heroRef });
 
   useGSAP(() => {
@@ -47,6 +72,12 @@ export default function Home() {
     setupParallax(aboutImageRef.current, 0.4);
     const parallaxImg = parallaxRef.current?.querySelector('.home-parallax__image');
     if (parallaxImg) setupParallax(parallaxImg, 0.4);
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   return (

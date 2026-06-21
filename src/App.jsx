@@ -8,6 +8,7 @@ import { scrollToTop } from './utils/scroll';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import PageTransition from './components/PageTransition/PageTransition';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import './styles/global.css';
 
 gsap.registerPlugin(useGSAP);
@@ -30,9 +31,15 @@ function ScrollManager() {
     scrollToTop();
     // Note: ScrollTrigger cleanup is handled by PageTransition component
     // to avoid conflicts with page transition animations
+    // Increased delay to ensure lazy-loaded components are fully rendered
+    // before ScrollTrigger calculations run
     const timer = setTimeout(() => {
       refreshScrollTrigger();
-    }, 300);
+      // Second refresh as a safety net for slower loads
+      setTimeout(() => {
+        refreshScrollTrigger();
+      }, 500);
+    }, 500);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
@@ -49,18 +56,20 @@ function AppContent() {
       <main>
         <PageTransition>
           <Suspense fallback={<div className="page-loading" />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/listings" element={<Listings />} />
-              <Route path="/listings/:slug" element={<PropertyDetail />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/agents" element={<Agents />} />
-              <Route path="/agents/:slug" element={<AgentDetail />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/listings" element={<Listings />} />
+                <Route path="/listings/:slug" element={<PropertyDetail />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/agents" element={<Agents />} />
+                <Route path="/agents/:slug" element={<AgentDetail />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </ErrorBoundary>
           </Suspense>
         </PageTransition>
       </main>

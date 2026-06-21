@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
-import { animateSectionReveal } from '../../utils/animations';
+import { animateSectionReveal, ScrollTrigger } from '../../utils/animations';
 import { getBlogPostBySlug, getRelatedPosts } from '../../data/blogPosts';
 import { getAgentBySlug } from '../../data/agents';
 import BlogCard from '../../components/BlogCard/BlogCard';
@@ -14,6 +14,12 @@ export default function BlogPost() {
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   if (!post) {

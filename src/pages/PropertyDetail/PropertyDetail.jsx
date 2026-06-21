@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
-import { animateSectionReveal } from '../../utils/animations';
+import { animateSectionReveal, ScrollTrigger } from '../../utils/animations';
 import { getPropertyBySlug, formatPrice } from '../../data/properties';
 import { getAgentBySlug } from '../../data/agents';
 import Carousel from '../../components/Carousel/Carousel';
@@ -18,6 +18,12 @@ export default function PropertyDetail() {
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   if (!property) {

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { animateSectionReveal } from '../../utils/animations';
+import { animateSectionReveal, ScrollTrigger } from '../../utils/animations';
 import { useMagneticButton } from '../../hooks/useMagneticButton';
 import './Contact.css';
 
@@ -13,6 +13,12 @@ export default function Contact() {
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
+
+    // Refresh ScrollTrigger after animations are set up to ensure
+    // trigger points are calculated based on the complete DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
   }, { scope: pageRef });
 
   const validate = () => {

@@ -14,7 +14,7 @@ export function animateSectionReveal(scope, selector = '[data-animate]') {
     elements.forEach(el => {
       gsap.set(el, { opacity: 1, y: 0 });
     });
-  }, 1000);
+  }, 800);
 
   const animation = gsap.to(elements, {
     opacity: 1,
@@ -28,6 +28,10 @@ export function animateSectionReveal(scope, selector = '[data-animate]') {
       toggleActions: 'play none none none',
       onRefresh: () => {
         // Clear fallback if animation successfully triggers
+        clearTimeout(fallbackTimeout);
+      },
+      onEnter: () => {
+        // Clear fallback when animation enters viewport
         clearTimeout(fallbackTimeout);
       },
     },
@@ -49,7 +53,7 @@ export function animateStaggerCards(scope, selector = '[data-card]') {
     cards.forEach(card => {
       gsap.set(card, { opacity: 1, y: 0 });
     });
-  }, 1000);
+  }, 800);
 
   const animation = gsap.to(cards, {
     opacity: 1,
@@ -62,6 +66,10 @@ export function animateStaggerCards(scope, selector = '[data-card]') {
       start: 'top 80%',
       toggleActions: 'play none none none',
       onRefresh: () => {
+        clearTimeout(fallbackTimeout);
+      },
+      onEnter: () => {
+        // Clear fallback when animation enters viewport
         clearTimeout(fallbackTimeout);
       },
     },

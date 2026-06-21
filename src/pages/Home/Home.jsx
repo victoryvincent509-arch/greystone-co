@@ -80,9 +80,6 @@ export default function Home() {
 
   useGSAP(() => {
     animateSectionReveal(pageRef.current);
-    setupParallax(aboutImageRef.current, 0.4);
-    const parallaxImg = parallaxRef.current?.querySelector('.home-parallax__image');
-    if (parallaxImg) setupParallax(parallaxImg, 0.4);
 
     // Refresh ScrollTrigger after animations are set up to ensure
     // trigger points are calculated based on the complete DOM
@@ -90,6 +87,27 @@ export default function Home() {
       ScrollTrigger.refresh();
     }, 100);
   }, { scope: pageRef });
+
+  // Separate effect for parallax images to ensure they are in DOM
+  useEffect(() => {
+    const checkAndAnimateParallax = () => {
+      const aboutImg = aboutImageRef.current;
+      const parallaxImg = parallaxRef.current?.querySelector('.home-parallax__image');
+
+      if (aboutImg || parallaxImg) {
+        // At least one parallax image is ready, animate them
+        if (aboutImg) setupParallax(aboutImg, 0.4);
+        if (parallaxImg) setupParallax(parallaxImg, 0.4);
+        ScrollTrigger.refresh();
+      } else {
+        // Parallax images not ready yet, retry after delay
+        setTimeout(checkAndAnimateParallax, 50);
+      }
+    };
+
+    // Delay initial check to allow React to render
+    setTimeout(checkAndAnimateParallax, 150);
+  }, []);
 
   // Separate effect for stagger cards to ensure grid items are in DOM
   useEffect(() => {
